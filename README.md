@@ -29,9 +29,22 @@ WIT/
 
 ## Setup Instructions
 
+### Prerequisites
+
+1. **Supabase Account**: Sign up at [supabase.com](https://supabase.com)
+2. **Python 3.8+**: Ensure Python is installed
+3. **Node.js 16+**: For the React frontend
+
 ### Backend Setup
 
-#### Option 1: Using Setup Scripts (Recommended)
+#### Step 1: Supabase Configuration
+
+1. Create a new Supabase project
+2. Run the database schema from `backend/supabase_schema.sql`
+3. Copy your project credentials to a `.env` file
+4. See `SUPABASE_SETUP.md` for detailed instructions
+
+#### Step 2: Install and Run
 
 **On macOS/Linux:**
 ```bash
@@ -109,14 +122,16 @@ start_backend.bat
 - **Backend**: FastAPI, Python
 - **Frontend**: React, React Router
 - **Styling**: CSS3 with modern design principles
-- **Database**: In-memory storage (simulated)
+- **Database**: Supabase (PostgreSQL with real-time features)
 
 ## Development Notes
 
-- The backend currently uses simulated data storage
+- The backend uses Supabase for persistent data storage
 - Video generation is simulated for demo purposes
 - CORS is configured for localhost development
 - JWT tokens are used for authentication
+- Passwords are securely hashed using bcrypt
+- Row Level Security (RLS) ensures data privacy
 
 ## Future Enhancements
 

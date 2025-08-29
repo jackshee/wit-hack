@@ -29,6 +29,7 @@ const VideoToSignPage = () => {
   const videoRef = useRef(null);
   const scanningIntervalRef = useRef(null); // Controls the continuous scanning loop
   const lastProcessedTextRef = useRef(''); // Prevents duplicate processing of same text
+  const isScanningRef = useRef(false); // Track scanning state in real-time (fixes closure issue)
 
   // Initialize Tesseract worker when component mounts
   useEffect(() => {
@@ -63,6 +64,7 @@ const VideoToSignPage = () => {
       scanningIntervalRef.current = null;
     }
     setIsScanning(false);
+    isScanningRef.current = false; // Update ref to match state
     setIsProcessing(false);
   }, []);
 
@@ -190,7 +192,6 @@ const VideoToSignPage = () => {
       // Extract the recognized text
       const detectedText = result.data.text.trim();
       
-      console.log('OCR Result:', detectedText);
       return detectedText;
       
     } catch (error) {
@@ -207,13 +208,14 @@ const VideoToSignPage = () => {
       return; // Don't start if conditions aren't met
     }
 
-    console.log('Starting live OCR scanning...');
     setIsScanning(true);
+    isScanningRef.current = true; // Update ref immediately to fix closure issue
     
     // Set up continuous frame processing
     // Process frames every 500ms (2 FPS) to balance responsiveness and performance
     scanningIntervalRef.current = setInterval(async () => {
-      if (!videoRef.current || !isScanning) {
+      // Use ref instead of state to avoid closure issue
+      if (!videoRef.current || !isScanningRef.current) {
         return;
       }
 
@@ -234,7 +236,7 @@ const VideoToSignPage = () => {
           // Only update if we got new text (prevents flickering)
           setLiveText(detectedText);
           lastProcessedTextRef.current = detectedText;
-          console.log('New text detected:', detectedText);
+          console.log('🔍 Live Text Detected:', detectedText);
         }
         
       } catch (error) {
@@ -242,11 +244,13 @@ const VideoToSignPage = () => {
       }
     }, 500); // 500ms interval = 2 FPS
     
-  }, [isCameraActive, tesseractWorker, isScanning, processFrameWithOCR]);
+  }, [isCameraActive, tesseractWorker, processFrameWithOCR]);
 
   // Function to stop live scanning
   const stopLiveScanning = useCallback(() => {
-    console.log('Stopping live OCR scanning...');
+    setIsScanning(false);
+    isScanningRef.current = false; // Update ref immediately to fix closure issue
+    
     cleanupScanning();
     
     // Set the final text to the last detected text
@@ -257,12 +261,10 @@ const VideoToSignPage = () => {
 
   // Function to handle mouse/touch events for live scanning
   const handleScanStart = useCallback(() => {
-    console.log('Scan start detected');
     startLiveScanning();
   }, [startLiveScanning]);
 
   const handleScanStop = useCallback(() => {
-    console.log('Scan stop detected');
     stopLiveScanning();
   }, [stopLiveScanning]);
 

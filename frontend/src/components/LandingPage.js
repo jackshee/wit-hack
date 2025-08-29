@@ -43,6 +43,10 @@ const LandingPage = () => {
     navigate('/video-to-sign');
   };
 
+  const handleImageToSign = () => {
+    navigate('/image-to-sign');
+  };
+
   return (
     <div>
       {/* Header */}
@@ -88,6 +92,9 @@ const LandingPage = () => {
             </button>
             <button className="btn btn-secondary" onClick={handleVideoToSign}>
               Video to Sign
+            </button>
+            <button className="btn btn-secondary" onClick={handleImageToSign}>
+              Image to Sign
             </button>
           </div>
         </div>

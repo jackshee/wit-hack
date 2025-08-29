@@ -4,6 +4,7 @@ A web application that translates text into sign language videos, making childre
 
 ## Features
 
+ asdfsafads 
 - **Landing Page**: Hero section describing the project and signup functionality
 - **Text Translation**: Input text and receive sign language video output
 - **User Management**: Signup and authentication system

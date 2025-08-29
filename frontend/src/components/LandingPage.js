@@ -35,12 +35,37 @@ const LandingPage = () => {
     }
   };
 
-  const handleTryNow = () => {
+  const handleTextToSign = () => {
     navigate('/translator');
+  };
+
+  const handleVideoToSign = () => {
+    navigate('/video-to-sign');
   };
 
   return (
     <div>
+      {/* Header */}
+      <header className="header">
+        <div className="container">
+          <div className="header-content">
+            <div className="logo-section">
+              <div className="logo-placeholder">Logo</div>
+              <span className="logo-text">Dougie.ai</span>
+            </div>
+            <nav className="nav-menu">
+              <a href="#home">Home</a>
+              <a href="#technology">Our Technology</a>
+              <a href="#about">About</a>
+              <a href="#partners">Partners</a>
+              <a href="#media">Media</a>
+              <a href="#insights">Insights</a>
+              <a href="#contact">Contact</a>
+            </nav>
+          </div>
+        </div>
+      </header>
+
       {/* Hero Section */}
       <section className="hero-section">
         <div className="container">
@@ -50,9 +75,21 @@ const LandingPage = () => {
             by translating text into sign language videos. Our AI-powered platform 
             helps create inclusive reading experiences for all children.
           </p>
-          <button className="btn" onClick={handleTryNow}>
-            Try Now
-          </button>
+        </div>
+      </section>
+
+      {/* Try Now Section */}
+      <section className="try-now-section">
+        <div className="container">
+          <h1>Try Now</h1>
+          <div className="button-group">
+            <button className="btn btn-primary" onClick={handleTextToSign}>
+              Text to Sign
+            </button>
+            <button className="btn btn-secondary" onClick={handleVideoToSign}>
+              Video to Sign
+            </button>
+          </div>
         </div>
       </section>
 

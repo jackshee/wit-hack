@@ -20,7 +20,7 @@ class Settings:
 
     # PixVerse API Configuration
     PIXVERSE_API_KEY: str = os.getenv(
-        "PIXVERSE_API_KEY", "sk-9e71e726f0814372941d6224ea6db579"
+        "PIXVERSE_API_KEY", ""
     )
 
     # Security

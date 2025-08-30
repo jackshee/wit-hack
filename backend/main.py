@@ -1,18 +1,23 @@
 from fastapi import FastAPI, HTTPException, Depends, status, UploadFile, File
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
+from fastapi.staticfiles import StaticFiles
 from pydantic import BaseModel
 from typing import List, Optional
 import jwt
 from datetime import datetime, timedelta
 import uuid
+import os
 
 # Import our custom modules
-from .config import settings
-from .database import db
-from .pixverse_api import pixverse_client
+from config import settings
+from database import db
+from pixverse_api import pixverse_client
 
 app = FastAPI(title="Sign Language Translator API", version="1.0.0")
+
+# Mount static files directory
+app.mount("/assets", StaticFiles(directory="../assets"), name="assets")
 
 
 # Validate environment variables on startup
@@ -148,13 +153,14 @@ async def login(user: UserLogin):
 @app.post("/translate", response_model=TextResponse)
 async def translate_text(text_input: TextInput, user_id: str = Depends(verify_token)):
     try:
-        # Generate sign language video using PixVerse API
-        video_url = await pixverse_client.generate_sign_language_video(text_input.text)
+        # Generate sign language video using PixVerse API (disabled by default)
+        video_url = pixverse_client.generate_sign_language_video(
+            text_input.text, usePixverse=False
+        )
 
         if not video_url:
             # Fallback to demo video if PixVerse API fails
-            video_url = f"/assets/sample_sign_{uuid.uuid4()}.mp4"
-            print("PixVerse API failed, using fallback video URL")
+            video_url = "http://localhost:8000/assets/wasnt hungry anymore.mp4"
 
         # Create translation record in database
         translation = await db.create_text_translation(
@@ -164,7 +170,6 @@ async def translate_text(text_input: TextInput, user_id: str = Depends(verify_to
         return translation
 
     except Exception as e:
-        print(f"Error in translate_text: {e}")
         raise HTTPException(status_code=500, detail=str(e))
 
 
@@ -174,29 +179,37 @@ async def translate_text_demo(text_input: TextInput):
     Demo endpoint for translating text to sign language without authentication.
     This is used by the live OCR frontend for testing purposes.
     """
+
     try:
-        # Generate sign language video using PixVerse API
-        video_url = await pixverse_client.generate_sign_language_video(text_input.text)
+        # Generate sign language video using PixVerse API (disabled by default)
+        video_url = pixverse_client.generate_sign_language_video(
+            text_input.text, usePixverse=False
+        )
 
         if not video_url:
             # Fallback to demo video if PixVerse API fails
-            video_url = "/assets/Elmo_Signs_How_Are_You_in_AUSLAN.mp4"
-            print("PixVerse API failed, using fallback video URL")
+            video_url = "http://localhost:8000/assets/wasnt hungry anymore.mp4"
 
-        return {
+        response_data = {
             "text": text_input.text,
             "video_url": video_url,
             "message": "Demo translation successful",
+            "status": "success",
+            "error_details": None,
         }
 
+        return response_data
+
     except Exception as e:
-        print(f"Error in translate_text_demo: {e}")
         # Return fallback response on error
-        return {
+        fallback_response = {
             "text": text_input.text,
-            "video_url": "/assets/Elmo_Signs_How_Are_You_in_AUSLAN.mp4",
+            "video_url": "http://localhost:8000/assets/wasnt hungry anymore.mp4",
             "message": "Demo translation successful (fallback)",
+            "status": "error",
+            "error_details": str(e),
         }
+        return fallback_response
 
 
 @app.post("/api/ocr")

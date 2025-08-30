@@ -33,14 +33,23 @@ const TextToSignPage = () => {
         text: inputText
       });
       
+      // Display status message to user
+      if (response.data.status === 'fallback') {
+        setMessage(`⚠️ ${response.data.message} - ${response.data.error_details}`);
+      } else if (response.data.status === 'error') {
+        setMessage(`❌ ${response.data.message} - ${response.data.error_details}`);
+      } else {
+        setMessage(`✅ ${response.data.message}`);
+      }
+      
       setTranslationResult({
         text: inputText,
         videoUrl: response.data.video_url,
         prompt: `Sign language translation for: "${inputText}"`
       });
+      
     } catch (error) {
-      console.error('Translation error:', error);
-      setMessage('Translation failed. Please try again.');
+      setMessage(`Translation failed: ${error.response?.data?.detail || error.message || 'Unknown error'}`);
     } finally {
       setIsTranslating(false);
     }

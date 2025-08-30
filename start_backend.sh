@@ -38,8 +38,15 @@ if ! python -c "import fastapi" &> /dev/null; then
     exit 1
 fi
 
-# Start the server
-echo "🚀 Starting server at http://localhost:8000"
+# Check if uvicorn is available
+if ! python -c "import uvicorn" &> /dev/null; then
+    echo "❌ Uvicorn not found! Installing..."
+    pip install uvicorn
+fi
+
+# Start the server with uvicorn and auto-reload
+echo "🚀 Starting server with auto-reload at http://localhost:8000"
+echo "📝 Server will automatically restart when you make code changes"
 echo "Press Ctrl+C to stop the server"
 echo ""
-python main.py 
+uvicorn main:app --reload --host 0.0.0.0 --port 8000 

@@ -113,29 +113,25 @@ class PixVerseAPI:
 
         while True:
             if time.time() - start_time > timeout:
-                print(f"Timeout waiting for video generation after {timeout} seconds")
                 return None
 
             try:
                 status, url = self.check_status(video_id)
-                print(f"Video status: {status}")
 
                 if status == 1:  # Completed
-                    print(f"Video generation completed! URL: {url}")
                     return url
                 elif status == 5:  # Processing
-                    print("Video is still processing...")
+                    pass  # Continue waiting
                 else:
-                    print(f"Unknown status: {status}")
+                    pass  # Continue waiting
 
             except Exception as e:
-                print(f"Error checking status: {e}")
                 return None
 
             time.sleep(check_interval)
 
     def generate_sign_language_video(
-        self, text: str, duration: int = 5
+        self, text: str, duration: int = 5, usePixverse: bool = False
     ) -> Optional[str]:
         """
         Generate a sign language video for the given text.
@@ -143,17 +139,20 @@ class PixVerseAPI:
         Args:
             text: The text to translate to sign language
             duration: Duration of the video in seconds
+            usePixverse: Whether to use PixVerse API (False = use local asset)
 
         Returns:
             Video URL if successful, None if error
         """
+        if not usePixverse:
+            # Return local asset instead of calling PixVerse API
+            return "http://localhost:8000/assets/wasnt hungry anymore.mp4"
+
         # Create a prompt optimized for sign language generation
         prompt = f"An avatar doing hand signing asking '{text}' in Auslan sign language"
         negative_prompt = (
             "text, words, letters, writing, bad quality, blurry, distorted"
         )
-
-        print(f"Generating sign language video for: {text}")
 
         # Generate the video
         result = self.generate_video(
@@ -164,23 +163,18 @@ class PixVerseAPI:
         )
 
         if not result:
-            print("Failed to initiate video generation")
             return None
 
         try:
             video_id = result["Resp"]["video_id"]
-            print(f"Video generation initiated with ID: {video_id}")
 
             # Wait for completion
             video_url = self.wait_for_completion(video_id)
             return video_url
 
         except KeyError as e:
-            print(f"Unexpected response format: {e}")
-            print(f"Response: {result}")
             return None
         except Exception as e:
-            print(f"Error in video generation process: {e}")
             return None
 
 

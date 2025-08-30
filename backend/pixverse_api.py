@@ -146,7 +146,7 @@ class PixVerseAPI:
         """
         if not usePixverse:
             # Return local asset instead of calling PixVerse API
-            return "http://localhost:8000/assets/wasnt hungry anymore.mp4"
+            return "/assets/wasnt hungry anymore.mp4"
 
         # Create a prompt optimized for sign language generation
         prompt = f"An avatar doing hand signing asking '{text}' in Auslan sign language"

@@ -32,6 +32,7 @@ def test_pixverse_api():
             test_text, usePixverse=False
         )
         print(f"✅ Local asset URL: {video_url}")
+        print(f"📁 Asset should be accessible at: {video_url}")
 
         print("\n🚀 Testing with usePixverse=True (PixVerse API)...")
         video_url = pixverse_client.generate_sign_language_video(

@@ -17,7 +17,7 @@ from pixverse_api import pixverse_client
 app = FastAPI(title="Sign Language Translator API", version="1.0.0")
 
 # Mount static files directory
-app.mount("/assets", StaticFiles(directory="../assets"), name="assets")
+app.mount("/assets", StaticFiles(directory="assets"), name="assets")
 
 
 # Validate environment variables on startup
@@ -160,7 +160,7 @@ async def translate_text(text_input: TextInput, user_id: str = Depends(verify_to
 
         if not video_url:
             # Fallback to demo video if PixVerse API fails
-            video_url = "http://localhost:8000/assets/wasnt hungry anymore.mp4"
+            video_url = "/assets/wasnt hungry anymore.mp4"
 
         # Create translation record in database
         translation = await db.create_text_translation(
@@ -188,7 +188,7 @@ async def translate_text_demo(text_input: TextInput):
 
         if not video_url:
             # Fallback to demo video if PixVerse API fails
-            video_url = "http://localhost:8000/assets/wasnt hungry anymore.mp4"
+            video_url = "/assets/wasnt hungry anymore.mp4"
 
         response_data = {
             "text": text_input.text,
@@ -204,7 +204,7 @@ async def translate_text_demo(text_input: TextInput):
         # Return fallback response on error
         fallback_response = {
             "text": text_input.text,
-            "video_url": "http://localhost:8000/assets/wasnt hungry anymore.mp4",
+            "video_url": "/assets/wasnt hungry anymore.mp4",
             "message": "Demo translation successful (fallback)",
             "status": "error",
             "error_details": str(e),

@@ -18,6 +18,7 @@ WIT/
 ├── backend/                 # FastAPI backend
 │   ├── main.py             # Main API application
 │   ├── requirements.txt    # Backend dependencies
+│   ├── assets/             # Video assets (moved here)
 │   └── __init__.py         # Package initialization
 ├── frontend/               # React frontend
 │   ├── public/             # Static files
@@ -26,7 +27,6 @@ WIT/
 │   │   ├── App.js          # Main app component
 │   │   └── index.js        # Entry point
 │   └── package.json        # Frontend dependencies
-└── assets/                 # Video assets
 ```
 
 ## Setup Instructions

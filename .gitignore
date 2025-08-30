@@ -122,7 +122,7 @@ tmp/
 temp/
 
 # Assets (if you want to ignore them)
-assets/
+# assets/
 
 # Local development
 .env.local

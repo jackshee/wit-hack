@@ -1,4 +1,4 @@
-from fastapi import FastAPI, HTTPException, Depends, status
+from fastapi import FastAPI, HTTPException, Depends, status, UploadFile, File
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
 from pydantic import BaseModel
@@ -157,6 +157,46 @@ async def translate_text(text_input: TextInput, user_id: str = Depends(verify_to
         )
 
         return translation
+
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+
+@app.post("/api/translate")
+async def translate_text_demo(text_input: TextInput):
+    """
+    Demo endpoint for translating text to sign language without authentication.
+    This is used by the live OCR frontend for testing purposes.
+    """
+    try:
+        # For demo purposes, return a placeholder video URL
+        # In production, this would call a sign language AI model
+        video_url = "/assets/Elmo_Signs_How_Are_You_in_AUSLAN.mp4"
+
+        return {
+            "text": text_input.text,
+            "video_url": video_url,
+            "message": "Demo translation successful",
+        }
+
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+
+@app.post("/api/ocr")
+async def process_ocr(file: UploadFile = File(...)):
+    """
+    Process OCR on uploaded image file.
+    This endpoint is prepared for future OCR implementation.
+    """
+    try:
+        # For now, return a placeholder response
+        # In production, this would use EasyOCR or similar library
+        return {
+            "text": "OCR processing not yet implemented. This is a placeholder response.",
+            "confidence": 0.0,
+            "message": "OCR endpoint ready for implementation",
+        }
 
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))

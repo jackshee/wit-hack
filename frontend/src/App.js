@@ -1,7 +1,8 @@
 import React from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import LandingPage from './components/LandingPage';
-import TranslatorPage from './components/TranslatorPage';
+import TextToSignPage from './components/TextToSignPage';
+import VideoToSignPage from './components/VideoToSignPage';
 import './App.css';
 
 function App() {
@@ -10,7 +11,8 @@ function App() {
       <div className="App">
         <Routes>
           <Route path="/" element={<LandingPage />} />
-          <Route path="/translator" element={<TranslatorPage />} />
+          <Route path="/translator" element={<TextToSignPage />} />
+          <Route path="/video-to-sign" element={<VideoToSignPage />} />
         </Routes>
       </div>
     </Router>

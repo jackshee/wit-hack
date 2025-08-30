@@ -4,6 +4,8 @@ import LandingPage from './components/LandingPage';
 import TextToSignPage from './components/TextToSignPage';
 import VideoToSignPage from './components/VideoToSignPage';
 import ImageToSignPage from './components/ImageToSignPage';
+import ProfilePage from './components/ProfilePage';
+import ContactPage from './components/ContactPage';
 import './App.css';
 
 function App() {
@@ -15,6 +17,8 @@ function App() {
           <Route path="/translator" element={<TextToSignPage />} />
           <Route path="/video-to-sign" element={<VideoToSignPage />} />
           <Route path="/image-to-sign" element={<ImageToSignPage />} />
+          <Route path="/profile" element={<ProfilePage />} />
+          <Route path="/contact" element={<ContactPage />} />
         </Routes>
       </div>
     </Router>

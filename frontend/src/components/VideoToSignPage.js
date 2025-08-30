@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import VideoDisplay from './VideoDisplay';
 import LiveScanButton from './LiveScanButton';
 import Tesseract from 'tesseract.js';
+import Navbar from './Navbar';
 
 const VideoToSignPage = () => {
   const navigate = useNavigate();
@@ -325,31 +326,45 @@ const VideoToSignPage = () => {
   };
 
   return (
-    <div className="video-to-sign-page">
-      {/* Header Section */}
-      <header className="page-header">
-        <div className="container">
-          <button className="back-button" onClick={handleBackToHome}>
-            ← Back to Home
+    <div className="min-h-screen bg-background">
+      {/* Header */}
+      <Navbar currentPage="video-to-sign" />
+
+      {/* Hero Section */}
+      <section className="bg-gradient-to-br from-primary to-blue-600 text-white py-8 sm:py-12">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+          <button 
+            onClick={handleBackToHome}
+            className="inline-flex items-center space-x-2 bg-white/20 hover:bg-white/30 text-white px-4 py-2 rounded-full transition-all duration-200 border border-white/30 mb-6"
+          >
+            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+            </svg>
+            <span>Back to Home</span>
           </button>
-          <h1>Live Text Scanner</h1>
-          <p>Point your camera at text and hold the scan button for live OCR detection</p>
+          
+          <h1 className="text-3xl sm:text-4xl lg:text-5xl font-heading font-bold mb-4 leading-tight">
+            Live Text Scanner
+          </h1>
+          <p className="text-lg sm:text-xl text-white/90 max-w-2xl mx-auto">
+            Point your camera at text and hold the scan button for live OCR detection
+          </p>
         </div>
-      </header>
+      </section>
 
       {/* Main Content */}
-      <div className="main-content">
-        <div className="container">
+      <section className="py-12 sm:py-16">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           {/* Camera Section */}
-          <div className="camera-section">
-            <div className="camera-controls">
+          <div className="card bg-content-bg mb-8">
+            <div className="text-center mb-6">
               {!isCameraActive ? (
-                <button className="btn btn-primary camera-btn" onClick={startCamera}>
+                <button className="btn-primary text-lg px-8 py-4" onClick={startCamera}>
                   📷 Start Camera
                 </button>
               ) : (
-                <div className="camera-buttons">
-                  <button className="btn btn-secondary camera-btn" onClick={stopCamera}>
+                <div className="space-y-4">
+                  <button className="btn-secondary text-lg px-8 py-4" onClick={stopCamera}>
                     🛑 Stop Camera
                   </button>
                   
@@ -366,28 +381,13 @@ const VideoToSignPage = () => {
             </div>
 
             {/* Camera View */}
-            <div className="camera-view">
+            <div className="relative bg-black rounded-lg overflow-hidden">
               {isCameraActive ? (
                 <>
                   {/* Mobile Back Button */}
                   <button 
-                    className="mobile-back-btn"
+                    className="fixed top-20 left-4 z-50 bg-black/70 text-white border border-white/30 rounded-full w-12 h-12 text-xl cursor-pointer hover:bg-black/90 transition-colors duration-200 md:hidden"
                     onClick={handleBackToHome}
-                    style={{
-                      position: 'fixed',
-                      top: '20px',
-                      left: '20px',
-                      zIndex: 1001,
-                      background: 'rgba(0, 0, 0, 0.7)',
-                      color: 'white',
-                      border: 'none',
-                      borderRadius: '50%',
-                      width: '50px',
-                      height: '50px',
-                      fontSize: '20px',
-                      cursor: 'pointer',
-                      display: 'none'
-                    }}
                   >
                     ←
                   </button>
@@ -397,13 +397,7 @@ const VideoToSignPage = () => {
                     autoPlay 
                     playsInline 
                     muted
-                    className="camera-video"
-                    style={{
-                      width: '100%',
-                      height: 'auto',
-                      maxWidth: '100%',
-                      display: 'block'
-                    }}
+                    className="w-full h-auto max-h-96 mx-auto block"
                     onLoadedMetadata={() => {
                       console.log('Video metadata loaded');
                       console.log('Video dimensions:', videoRef.current?.videoWidth, 'x', videoRef.current?.videoHeight);
@@ -427,53 +421,33 @@ const VideoToSignPage = () => {
                   
                   {/* Fallback if video doesn't show */}
                   {stream && !isVideoDisplaying && (
-                    <div style={{
-                      position: 'absolute',
-                      top: '50%',
-                      left: '50%',
-                      transform: 'translate(-50%, -50%)',
-                      color: 'white',
-                      textAlign: 'center',
-                      zIndex: 1000
-                    }}>
-                      <p>Camera active but video not displaying</p>
-                      <p>Check console for errors</p>
-                      <button 
-                        onClick={() => {
-                          if (videoRef.current && stream) {
-                            videoRef.current.srcObject = stream;
-                            videoRef.current.load();
-                            // Set a timeout to check if video is now displaying
-                            setTimeout(() => {
-                              if (videoRef.current && videoRef.current.videoWidth > 0) {
-                                setIsVideoDisplaying(true);
-                              }
-                            }, 500);
-                          }
-                        }}
-                        style={{
-                          background: 'rgba(255,255,255,0.2)',
-                          color: 'white',
-                          border: '1px solid white',
-                          padding: '10px 20px',
-                          borderRadius: '5px',
-                          cursor: 'pointer'
-                        }}
-                      >
-                        Retry Video
-                      </button>
+                    <div className="absolute inset-0 flex items-center justify-center text-white text-center z-10">
+                      <div>
+                        <p className="mb-2">Camera active but video not displaying</p>
+                        <p className="text-sm mb-4">Check console for errors</p>
+                        <button 
+                          onClick={() => {
+                            if (videoRef.current && stream) {
+                              videoRef.current.srcObject = stream;
+                              videoRef.current.load();
+                              // Set a timeout to check if video is now displaying
+                              setTimeout(() => {
+                                if (videoRef.current && videoRef.current.videoWidth > 0) {
+                                  setIsVideoDisplaying(true);
+                                }
+                              }, 500);
+                            }
+                          }}
+                          className="bg-white/20 hover:bg-white/30 text-white border border-white/30 px-4 py-2 rounded-lg cursor-pointer transition-colors duration-200"
+                        >
+                          Retry Video
+                        </button>
+                      </div>
                     </div>
                   )}
                   
                   {/* Debug Info */}
-                  <div style={{ 
-                    background: '#f0f0f0', 
-                    padding: '10px', 
-                    margin: '10px 0', 
-                    borderRadius: '5px',
-                    fontSize: '12px',
-                    textAlign: 'left'
-                  }}>
+                  <div className="bg-gray-800/80 text-white p-3 text-xs text-left">
                     <strong>Debug Info:</strong><br/>
                     Camera Active: {isCameraActive ? 'Yes' : 'No'}<br/>
                     Stream: {stream ? 'Connected' : 'None'}<br/>
@@ -483,23 +457,23 @@ const VideoToSignPage = () => {
                   </div>
                 </>
               ) : (
-                <div className="camera-placeholder">
-                  <div className="placeholder-icon">📷</div>
-                  <p>Camera not active</p>
-                  <p>Click "Start Camera" to begin</p>
+                <div className="py-16 text-center text-white">
+                  <div className="text-6xl mb-4">📷</div>
+                  <p className="text-lg mb-2">Camera not active</p>
+                  <p className="text-sm opacity-80">Click "Start Camera" to begin</p>
                 </div>
               )}
             </div>
 
             {/* Live Text Display */}
             {isScanning && (
-              <div className="live-text-display">
-                <h4>🔍 Live Detection:</h4>
-                <div className="live-text-content">
+              <div className="mt-6 p-4 bg-secondary/20 rounded-lg">
+                <h4 className="text-lg font-semibold text-text mb-3">🔍 Live Detection:</h4>
+                <div className="bg-background rounded-lg p-4">
                   {liveText ? (
-                    <p className="detected-text">{liveText}</p>
+                    <p className="text-text font-medium">{liveText}</p>
                   ) : (
-                    <p className="scanning-indicator">
+                    <p className="text-text/70">
                       {isProcessing ? 'Processing...' : 'Point camera at text...'}
                     </p>
                   )}
@@ -508,36 +482,46 @@ const VideoToSignPage = () => {
             )}
 
             {/* Instructions */}
-            <div className="instructions">
-              <h3>How to use:</h3>
-              <ol>
-                <li>Start your camera</li>
-                <li>Point it at text you want to scan</li>
-                <li><strong>Hold down</strong> the "Hold to Scan" button</li>
-                <li>Move the camera over the text - it will detect automatically</li>
-                <li>Release the button when you're done scanning</li>
-                <li>Click "Translate to Sign" to convert the detected text</li>
+            <div className="mt-6 p-4 bg-background rounded-lg">
+              <h3 className="text-lg font-semibold text-text mb-3">How to use:</h3>
+              <ol className="text-text/80 space-y-1 text-sm">
+                <li>1. Start your camera</li>
+                <li>2. Point it at text you want to scan</li>
+                <li>3. <strong>Hold down</strong> the "Hold to Scan" button</li>
+                <li>4. Move the camera over the text - it will detect automatically</li>
+                <li>5. Release the button when you're done scanning</li>
+                <li>6. Click "Translate to Sign" to convert the detected text</li>
               </ol>
             </div>
           </div>
 
           {/* Final Text Section */}
           {finalText && (
-            <div className="final-text-section">
-              <h3>📝 Final Text to Translate:</h3>
-              <div className="text-display">
-                <pre>{finalText}</pre>
+            <div className="card bg-content-bg mb-8">
+              <h3 className="text-xl font-heading font-semibold text-text mb-4">📝 Final Text to Translate:</h3>
+              <div className="bg-background rounded-lg p-4 mb-4">
+                <pre className="text-text whitespace-pre-wrap font-mono text-sm">{finalText}</pre>
               </div>
-              <div className="action-buttons">
+              <div className="flex flex-col sm:flex-row gap-4 justify-center">
                 <button 
-                  className="btn btn-primary translate-btn"
+                  className="btn-primary text-lg px-8 py-4 disabled:opacity-50 disabled:cursor-not-allowed"
                   onClick={handleTranslateToSign}
                   disabled={isTranslating}
                 >
-                  {isTranslating ? 'Translating...' : '🎯 Translate to Sign'}
+                  {isTranslating ? (
+                    <div className="flex items-center justify-center space-x-2">
+                      <svg className="animate-spin h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                        <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                        <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                      </svg>
+                      <span>Translating...</span>
+                    </div>
+                  ) : (
+                    '🎯 Translate to Sign'
+                  )}
                 </button>
                 <button 
-                  className="btn btn-secondary"
+                  className="btn-secondary text-lg px-8 py-4"
                   onClick={handleClearAndRestart}
                 >
                   Clear & Start Over
@@ -548,9 +532,9 @@ const VideoToSignPage = () => {
 
           {/* Video Display Section */}
           {translationResult && (
-            <div className="video-display-section">
-              <h3>Sign Language Translation</h3>
-              <div className="video-area">
+            <div className="card bg-content-bg">
+              <h3 className="text-xl font-heading font-semibold text-text mb-4">Sign Language Translation</h3>
+              <div className="bg-background rounded-lg p-6">
                 <VideoDisplay 
                   isTranslating={isTranslating}
                   translationResult={translationResult}
@@ -561,7 +545,7 @@ const VideoToSignPage = () => {
             </div>
           )}
         </div>
-      </div>
+      </section>
     </div>
   );
 };

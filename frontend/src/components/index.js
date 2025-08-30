@@ -3,4 +3,7 @@ export { default as TextToSignPage } from './TextToSignPage';
 export { default as VideoToSignPage } from './VideoToSignPage';
 export { default as VideoDisplay } from './VideoDisplay';
 export { default as LiveScanButton } from './LiveScanButton';
-export { default as ImageToSignPage } from './ImageToSignPage'; 
+export { default as ImageToSignPage } from './ImageToSignPage';
+export { default as ProfilePage } from './ProfilePage';
+export { default as ContactPage } from './ContactPage';
+export { default as Navbar } from './Navbar'; 

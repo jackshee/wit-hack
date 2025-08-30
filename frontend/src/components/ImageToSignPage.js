@@ -2,6 +2,7 @@ import React, { useState, useRef, useCallback, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import VideoDisplay from './VideoDisplay';
 import Tesseract from 'tesseract.js';
+import Navbar from './Navbar';
 
 const ImageToSignPage = () => {
   const navigate = useNavigate();
@@ -171,26 +172,42 @@ const ImageToSignPage = () => {
   const fileInputRef = useRef(null);
 
   return (
-    <div className="image-to-sign-page">
-      {/* Header Section */}
-      <header className="page-header">
-        <div className="container">
-          <button className="back-button" onClick={handleBackToHome}>
-            ← Back to Home
+    <div className="min-h-screen bg-background">
+      {/* Header */}
+      <Navbar currentPage="image-to-sign" />
+
+      {/* Hero Section */}
+      <section className="bg-gradient-to-br from-primary to-blue-600 text-white py-8 sm:py-12">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+          <button 
+            onClick={handleBackToHome}
+            className="inline-flex items-center space-x-2 bg-white/20 hover:bg-white/30 text-white px-4 py-2 rounded-full transition-all duration-200 border border-white/30 mb-6"
+          >
+            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+            </svg>
+            <span>Back to Home</span>
           </button>
-          <h1>Image to Sign</h1>
-          <p>Upload a static image with text for better OCR accuracy</p>
+          
+          <h1 className="text-3xl sm:text-4xl lg:text-5xl font-heading font-bold mb-4 leading-tight">
+            Image to Sign Language
+          </h1>
+          <p className="text-lg sm:text-xl text-white/90 max-w-2xl mx-auto">
+            Upload a static image with text for better OCR accuracy
+          </p>
         </div>
-      </header>
+      </section>
 
       {/* Main Content */}
-      <div className="main-content">
-        <div className="container">
+      <section className="py-12 sm:py-16">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           {/* Image Upload Section */}
-          <div className="image-upload-section">
-            <h2>Upload Image</h2>
+          <div className="card bg-content-bg mb-8">
+            <h2 className="text-2xl sm:text-3xl font-heading font-bold text-text mb-6">
+              Upload Image
+            </h2>
             
-            <div className="upload-area">
+            <div className="text-center">
               <input
                 ref={fileInputRef}
                 type="file"
@@ -200,11 +217,11 @@ const ImageToSignPage = () => {
                 id="image-upload"
               />
               
-              <label htmlFor="image-upload" className="upload-button">
+              <label htmlFor="image-upload" className="btn-primary inline-block cursor-pointer">
                 {imagePreview ? '📷 Change Image' : '📁 Choose Image File'}
               </label>
               
-              <p className="upload-hint">
+              <p className="text-text/70 mt-4 text-sm">
                 Supported formats: JPG, PNG, GIF, BMP<br/>
                 For best OCR results, use clear, high-contrast images with readable text
               </p>
@@ -212,69 +229,106 @@ const ImageToSignPage = () => {
 
             {/* Image Preview */}
             {imagePreview && (
-              <div className="image-preview">
-                <h3>Image Preview</h3>
-                <img 
-                  src={imagePreview} 
-                  alt="Selected image" 
-                  className="preview-image"
-                />
-                <p className="image-info">
-                  File: {selectedImage?.name}<br/>
-                  Size: {(selectedImage?.size / 1024).toFixed(1)} KB
-                </p>
+              <div className="mt-8 text-center">
+                <h3 className="text-xl font-heading font-semibold text-text mb-4">Image Preview</h3>
+                <div className="inline-block bg-background rounded-lg p-4">
+                  <img 
+                    src={imagePreview} 
+                    alt="Selected image" 
+                    className="max-w-full h-auto max-h-64 rounded-lg shadow-md"
+                  />
+                  <div className="mt-3 text-sm text-text/70">
+                    <p>File: {selectedImage?.name}</p>
+                    <p>Size: {(selectedImage?.size / 1024).toFixed(1)} KB</p>
+                  </div>
+                </div>
               </div>
             )}
           </div>
 
           {/* OCR Processing Section */}
           {selectedImage && (
-            <div className="ocr-section">
-              <h2>Text Recognition</h2>
+            <div className="card bg-content-bg mb-8">
+              <h2 className="text-2xl sm:text-3xl font-heading font-bold text-text mb-6">
+                Text Recognition
+              </h2>
               
-              <button 
-                className="btn btn-primary process-btn"
-                onClick={processImageWithOCR}
-                disabled={isProcessing || !tesseractWorker}
-              >
-                {isProcessing ? '🔍 Processing...' : '🔍 Extract Text with OCR'}
-              </button>
-              
-              {isProcessing && (
-                <div className="processing-indicator">
-                  <p>Processing image with Tesseract.js...</p>
-                  <p>This may take a few seconds depending on image size and complexity.</p>
-                </div>
-              )}
+              <div className="text-center">
+                <button 
+                  className="btn-primary text-lg px-8 py-4 disabled:opacity-50 disabled:cursor-not-allowed"
+                  onClick={processImageWithOCR}
+                  disabled={isProcessing || !tesseractWorker}
+                >
+                  {isProcessing ? (
+                    <div className="flex items-center justify-center space-x-2">
+                      <svg className="animate-spin h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                        <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                        <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                      </svg>
+                      <span>Processing...</span>
+                    </div>
+                  ) : (
+                    '🔍 Extract Text with OCR'
+                  )}
+                </button>
+                
+                {isProcessing && (
+                  <div className="mt-6 p-4 bg-secondary/20 rounded-lg">
+                    <p className="text-text font-medium">Processing image with Tesseract.js...</p>
+                    <p className="text-text/70 text-sm">This may take a few seconds depending on image size and complexity.</p>
+                  </div>
+                )}
+              </div>
             </div>
           )}
 
           {/* OCR Results Section */}
           {detectedText && (
-            <div className="ocr-results-section">
-              <h2>Detected Text</h2>
+            <div className="card bg-content-bg mb-8">
+              <h2 className="text-2xl sm:text-3xl font-heading font-bold text-text mb-6">
+                Detected Text
+              </h2>
               
-              <div className="text-display">
-                <pre>{detectedText}</pre>
+              <div className="bg-background rounded-lg p-6 mb-6">
+                <pre className="text-text whitespace-pre-wrap font-mono text-sm">{detectedText}</pre>
               </div>
               
-              <div className="ocr-stats">
-                <p><strong>Confidence:</strong> {ocrConfidence.toFixed(1)}%</p>
-                <p><strong>Text Length:</strong> {detectedText.length} characters</p>
-                <p><strong>Words:</strong> {detectedText.split(/\s+/).filter(word => word.length > 0).length}</p>
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-6">
+                <div className="bg-background rounded-lg p-4 text-center">
+                  <p className="text-lg font-semibold text-primary">{ocrConfidence.toFixed(1)}%</p>
+                  <p className="text-sm text-text/70">Confidence</p>
+                </div>
+                <div className="bg-background rounded-lg p-4 text-center">
+                  <p className="text-lg font-semibold text-primary">{detectedText.length}</p>
+                  <p className="text-sm text-text/70">Characters</p>
+                </div>
+                <div className="bg-background rounded-lg p-4 text-center">
+                  <p className="text-lg font-semibold text-primary">{detectedText.split(/\s+/).filter(word => word.length > 0).length}</p>
+                  <p className="text-sm text-text/70">Words</p>
+                </div>
               </div>
               
-              <div className="action-buttons">
+              <div className="flex flex-col sm:flex-row gap-4 justify-center">
                 <button 
-                  className="btn btn-primary translate-btn"
+                  className="btn-primary text-lg px-8 py-4 disabled:opacity-50 disabled:cursor-not-allowed"
                   onClick={handleTranslateToSign}
                   disabled={isTranslating}
                 >
-                  {isTranslating ? 'Translating...' : '🎯 Translate to Sign'}
+                  {isTranslating ? (
+                    <div className="flex items-center justify-center space-x-2">
+                      <svg className="animate-spin h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                        <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                        <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                      </svg>
+                      <span>Translating...</span>
+                    </div>
+                  ) : (
+                    '🎯 Translate to Sign'
+                  )}
                 </button>
                 
                 <button 
-                  className="btn btn-secondary"
+                  className="btn-secondary text-lg px-8 py-4"
                   onClick={handleClearAndRestart}
                 >
                   Clear & Start Over
@@ -285,9 +339,11 @@ const ImageToSignPage = () => {
 
           {/* Video Display Section */}
           {translationResult && (
-            <div className="video-display-section">
-              <h2>Sign Language Translation</h2>
-              <div className="video-area">
+            <div className="card bg-content-bg">
+              <h2 className="text-2xl sm:text-3xl font-heading font-bold text-text mb-6">
+                Sign Language Translation
+              </h2>
+              <div className="bg-background rounded-lg p-6">
                 <VideoDisplay 
                   isTranslating={isTranslating}
                   translationResult={translationResult}
@@ -298,7 +354,7 @@ const ImageToSignPage = () => {
             </div>
           )}
         </div>
-      </div>
+      </section>
     </div>
   );
 };

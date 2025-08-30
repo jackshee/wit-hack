@@ -56,7 +56,7 @@ const VideoToSignPage = () => {
         tesseractWorker.terminate();
       }
     };
-  }, []);
+  }, [tesseractWorker]);
 
   // Cleanup function to stop scanning and clear intervals
   const cleanupScanning = useCallback(() => {

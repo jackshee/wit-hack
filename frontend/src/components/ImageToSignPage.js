@@ -44,7 +44,7 @@ const ImageToSignPage = () => {
         tesseractWorker.terminate();
       }
     };
-  }, []);
+  }, [tesseractWorker]);
 
   // Handle image file selection
   const handleImageSelect = useCallback((event) => {
@@ -234,7 +234,7 @@ const ImageToSignPage = () => {
                 <div className="inline-block bg-background rounded-lg p-4">
                   <img 
                     src={imagePreview} 
-                    alt="Selected image" 
+                    alt="Preview of selected image" 
                     className="max-w-full h-auto max-h-64 rounded-lg shadow-md"
                   />
                   <div className="mt-3 text-sm text-text/70">

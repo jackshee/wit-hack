@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import axios from 'axios';
 import Navbar from './Navbar';
 
 const LandingPage = () => {
@@ -55,11 +54,7 @@ const LandingPage = () => {
     }
   };
 
-  const toggleMode = () => {
-    setIsLoginMode(!isLoginMode);
-    setMessage('');
-    setFormData({ username: '', email: '', password: '' });
-  };
+
 
   const handleTextToSign = () => {
     navigate('/translator');

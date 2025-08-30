@@ -29,7 +29,8 @@ const TextToSignPage = () => {
 
     try {
       // Call the backend API to get translation
-      const response = await axios.post('http://localhost:8000/api/translate', {
+      const backendUrl = process.env.REACT_APP_BACKEND_URL || 'http://localhost:8000';
+      const response = await axios.post(`${backendUrl}/api/translate`, {
         text: inputText
       });
       

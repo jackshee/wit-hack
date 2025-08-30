@@ -32,7 +32,7 @@ pip install --upgrade pip
 
 # Install requirements
 echo "Installing requirements..."
-pip install -r ../requirements.txt
+pip install -r requirements.txt
 
 echo ""
 echo "✅ Backend setup complete!"

@@ -17,6 +17,7 @@ A web application that translates text into sign language videos, making childre
 WIT/
 ├── backend/                 # FastAPI backend
 │   ├── main.py             # Main API application
+│   ├── requirements.txt    # Backend dependencies
 │   └── __init__.py         # Package initialization
 ├── frontend/               # React frontend
 │   ├── public/             # Static files
@@ -25,8 +26,7 @@ WIT/
 │   │   ├── App.js          # Main app component
 │   │   └── index.js        # Entry point
 │   └── package.json        # Frontend dependencies
-├── assets/                 # Video assets
-└── requirements.txt        # Backend dependencies
+└── assets/                 # Video assets
 ```
 
 ## Setup Instructions
@@ -75,7 +75,7 @@ start_backend.bat
 
 3. **Install dependencies:**
    ```bash
-   pip install -r ../requirements.txt
+   pip install -r requirements.txt
    ```
 
 4. **Run the FastAPI server:**

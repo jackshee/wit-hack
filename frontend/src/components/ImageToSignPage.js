@@ -234,7 +234,7 @@ const ImageToSignPage = () => {
                 <div className="inline-block bg-background rounded-lg p-4">
                   <img 
                     src={imagePreview} 
-                    alt="Preview of selected image" 
+                    alt="Preview of selected file" 
                     className="max-w-full h-auto max-h-64 rounded-lg shadow-md"
                   />
                   <div className="mt-3 text-sm text-text/70">

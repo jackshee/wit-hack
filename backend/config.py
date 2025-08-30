@@ -18,6 +18,11 @@ class Settings:
         os.getenv("ACCESS_TOKEN_EXPIRE_MINUTES", "30")
     )
 
+    # PixVerse API Configuration
+    PIXVERSE_API_KEY: str = os.getenv(
+        "PIXVERSE_API_KEY", "sk-9e71e726f0814372941d6224ea6db579"
+    )
+
     # Security
     BCRYPT_ROUNDS: int = int(os.getenv("BCRYPT_ROUNDS", "12"))
 

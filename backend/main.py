@@ -8,8 +8,9 @@ from datetime import datetime, timedelta
 import uuid
 
 # Import our custom modules
-from config import settings
-from database import db
+from .config import settings
+from .database import db
+from .pixverse_api import pixverse_client
 
 app = FastAPI(title="Sign Language Translator API", version="1.0.0")
 
@@ -147,9 +148,13 @@ async def login(user: UserLogin):
 @app.post("/translate", response_model=TextResponse)
 async def translate_text(text_input: TextInput, user_id: str = Depends(verify_token)):
     try:
-        # For demo purposes, we'll simulate the video generation
-        # In production, this would call a sign language AI model
-        video_url = f"/assets/sample_sign_{uuid.uuid4()}.mp4"
+        # Generate sign language video using PixVerse API
+        video_url = await pixverse_client.generate_sign_language_video(text_input.text)
+
+        if not video_url:
+            # Fallback to demo video if PixVerse API fails
+            video_url = f"/assets/sample_sign_{uuid.uuid4()}.mp4"
+            print("PixVerse API failed, using fallback video URL")
 
         # Create translation record in database
         translation = await db.create_text_translation(
@@ -159,6 +164,7 @@ async def translate_text(text_input: TextInput, user_id: str = Depends(verify_to
         return translation
 
     except Exception as e:
+        print(f"Error in translate_text: {e}")
         raise HTTPException(status_code=500, detail=str(e))
 
 
@@ -169,9 +175,13 @@ async def translate_text_demo(text_input: TextInput):
     This is used by the live OCR frontend for testing purposes.
     """
     try:
-        # For demo purposes, return a placeholder video URL
-        # In production, this would call a sign language AI model
-        video_url = "/assets/Elmo_Signs_How_Are_You_in_AUSLAN.mp4"
+        # Generate sign language video using PixVerse API
+        video_url = await pixverse_client.generate_sign_language_video(text_input.text)
+
+        if not video_url:
+            # Fallback to demo video if PixVerse API fails
+            video_url = "/assets/Elmo_Signs_How_Are_You_in_AUSLAN.mp4"
+            print("PixVerse API failed, using fallback video URL")
 
         return {
             "text": text_input.text,
@@ -180,7 +190,13 @@ async def translate_text_demo(text_input: TextInput):
         }
 
     except Exception as e:
-        raise HTTPException(status_code=500, detail=str(e))
+        print(f"Error in translate_text_demo: {e}")
+        # Return fallback response on error
+        return {
+            "text": text_input.text,
+            "video_url": "/assets/Elmo_Signs_How_Are_You_in_AUSLAN.mp4",
+            "message": "Demo translation successful (fallback)",
+        }
 
 
 @app.post("/api/ocr")

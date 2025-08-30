@@ -6,6 +6,9 @@ import VideoToSignPage from './components/VideoToSignPage';
 import ImageToSignPage from './components/ImageToSignPage';
 import ProfilePage from './components/ProfilePage';
 import ContactPage from './components/ContactPage';
+import TechnologyPage from './components/TechnologyPage';
+import AboutPage from './components/AboutPage';
+import InsightsPage from './components/InsightsPage';
 import './App.css';
 
 function App() {
@@ -19,6 +22,9 @@ function App() {
           <Route path="/image-to-sign" element={<ImageToSignPage />} />
           <Route path="/profile" element={<ProfilePage />} />
           <Route path="/contact" element={<ContactPage />} />
+          <Route path="/technology" element={<TechnologyPage />} />
+          <Route path="/about" element={<AboutPage />} />
+          <Route path="/insights" element={<InsightsPage />} />
         </Routes>
       </div>
     </Router>

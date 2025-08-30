@@ -42,31 +42,19 @@ const Navbar = ({ currentPage = 'home' }) => {
                 Home
               </a>
               <a 
-                href="/#technology" 
-                className="text-text hover:text-primary transition-colors duration-200 font-medium"
-              >
-                Our Technology
-              </a>
-              <a 
-                href="/#about" 
+                href="/about" 
                 className="text-text hover:text-primary transition-colors duration-200 font-medium"
               >
                 About
               </a>
               <a 
-                href="/#partners" 
+                href="/technology" 
                 className="text-text hover:text-primary transition-colors duration-200 font-medium"
               >
-                Partners
+                Our Technology
               </a>
               <a 
-                href="/#media" 
-                className="text-text hover:text-primary transition-colors duration-200 font-medium"
-              >
-                Media
-              </a>
-              <a 
-                href="/#insights" 
+                href="/insights" 
                 className="text-text hover:text-primary transition-colors duration-200 font-medium"
               >
                 Insights
@@ -136,35 +124,21 @@ const Navbar = ({ currentPage = 'home' }) => {
                   Home
                 </a>
                 <a 
-                  href="/#technology" 
-                  className="block py-3 px-4 text-text hover:text-primary hover:bg-gray-50 rounded-lg transition-all duration-200 font-medium"
-                  onClick={closeMobileMenu}
-                >
-                  Our Technology
-                </a>
-                <a 
-                  href="/#about" 
+                  href="/about" 
                   className="block py-3 px-4 text-text hover:text-primary hover:bg-gray-50 rounded-lg transition-all duration-200 font-medium"
                   onClick={closeMobileMenu}
                 >
                   About
                 </a>
                 <a 
-                  href="/#partners" 
+                  href="/technology" 
                   className="block py-3 px-4 text-text hover:text-primary hover:bg-gray-50 rounded-lg transition-all duration-200 font-medium"
                   onClick={closeMobileMenu}
                 >
-                  Partners
+                  Our Technology
                 </a>
                 <a 
-                  href="/#media" 
-                  className="block py-3 px-4 text-text hover:text-primary hover:bg-gray-50 rounded-lg transition-all duration-200 font-medium"
-                  onClick={closeMobileMenu}
-                >
-                  Media
-                </a>
-                <a 
-                  href="/#insights" 
+                  href="/insights" 
                   className="block py-3 px-4 text-text hover:text-primary hover:bg-gray-50 rounded-lg transition-all duration-200 font-medium"
                   onClick={closeMobileMenu}
                 >
